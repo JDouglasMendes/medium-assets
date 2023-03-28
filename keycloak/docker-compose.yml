@@ -1,0 +1,34 @@
+version: "3.3"
+
+services:
+  keycloak:
+    image: jboss/keycloak
+    container_name: codeizi-keycloak
+    restart: always
+    ports:
+      - "8080:8080"  
+    environment:
+      KEYCLOAK_USER: keycloak
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: mysql
+      DB_ADDR: mysql
+      DB_USER: root
+      DB_PASSWORD: codeizi    
+    networks:
+    - database
+    
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: codeizi
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./volume/mysql:/var/lib/mysql
+    networks: 
+      - database
+          
+networks: 
+  database:
+    driver: bridge 
